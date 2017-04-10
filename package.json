@@ -1,5 +1,5 @@
 {
-  "name": "rollup-plugin-hash",
+  "name": "rollup-plugin-hash-fix",
   "version": "1.2.0",
   "description": "Rollup plugin to add a checksum to your destination filename",
   "main": "dist/rollup-plugin-hash.js",

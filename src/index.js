@@ -89,17 +89,25 @@ export default function hash(opts = {}) {
 			if(options.replace) {
 				fs.unlinkSync(bundle.dest);
 			}
+            if (options.outputPath) {
+                mkdirpath(`${options.outputPath}/${fileName}`);
+            }
 
 			if(options.manifest) {
 				const manifest = generateManifest(options.manifestKey || bundle.dest, fileName);
 				mkdirpath(options.manifest);
-				fs.writeFileSync(options.manifest, manifest, 'utf8');
+
+                if (options.outputPath) {
+                    fs.writeFileSync(`${options.outputPath}/${options.manifest}`, data.code, 'utf8');
+                } else {
+                    fs.writeFileSync(options.manifest, manifest, 'utf8');
+                }
+
 			}
 
 			mkdirpath(fileName);
 
             if (options.outputPath) {
-                mkdirpath(`${options.outputPath}/${fileName}`);
                 fs.writeFileSync(`${options.outputPath}/${fileName}`, data.code, 'utf8');
                 return;
             }
