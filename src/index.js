@@ -18,7 +18,8 @@ const msg = {
 	noTemplate: '[Hash] Destination filename must contain `[hash]` template.',
 	noAlgorithm: '[Hash] Algorithm can only be one of: md5, sha1, sha256, sha512',
 	noManifest: '[Hash] Manifest filename must be a string',
-	noManifestKey: '[Hash] Key for manifest filename must be a string'
+	noManifestKey: '[Hash] Key for manifest filename must be a string',
+    noOutputPath: '[Hash] Output path must be a string'
 };
 
 function hasTemplate(dest) {
@@ -77,6 +78,10 @@ export default function hash(opts = {}) {
 				logError(msg.noManifestKey);
 				return false;
 			}
+            if(options.outputPath && typeof options.outputPath !== 'string') {
+                logError(msg.noOutputPath);
+                return false;
+            }
 
 			const hash = hasha(data.code, options);
 			const fileName = formatFilename(options.dest, hash);
@@ -92,8 +97,14 @@ export default function hash(opts = {}) {
 			}
 
 			mkdirpath(fileName);
+
+            if (options.outputPath) {
+                mkdirpath(`${options.outputPath}/${fileName}`);
+                fs.writeFileSync(`${options.outputPath}/${fileName}`, data.code, 'utf8');
+                return;
+            }
+
 			fs.writeFileSync(fileName, data.code, 'utf8');
 		}
 	};
 }
-
